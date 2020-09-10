@@ -66,6 +66,7 @@ function handleTweetCreatFormDidSubmit(event) {
         
         // Instead of realoading all tweets
         if (xhr.status === 201){ //if object was created
+            handleTweetFormError("", false)
             const newTweet = xhr.response
             //const newTweetJson = JSON.parse(newTweet) #in case the response type is not declared
             const newTweetElemet = formatTweetElement(newTweet)
@@ -86,7 +87,7 @@ function handleTweetCreatFormDidSubmit(event) {
             } else {
                 alert("An error occured, please try again.")
             }
-            console.log(contentErrorMsg)
+            //console.log(contentErrorMsg)
         } else if (xhr.status === 500) { // server error
             alert("There was a server error, try again.")
         }
