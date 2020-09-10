@@ -1,9 +1,13 @@
 import random
-from django.shortcuts import render
+from django.conf import settings
+from django.utils.http import is_safe_url
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 
 from .models import Tweet
 from .forms import TweetForm
+
+ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 def home_view(request, *args, **kwargs):
     #return HttpResponse("<h1> Hello World </h1>")
@@ -11,9 +15,19 @@ def home_view(request, *args, **kwargs):
 
 def tweet_create_view(request, *args, **kwargs):
     form = TweetForm(request.POST or None)
+    #print("ajax", request.is_ajax())
+    #now I can use this to redirect to where I want
+    #it comes from the POST request from the form
+    next_url = request.POST.get("next") or None 
+
     if form.is_valid():
         obj = form.save(commit=False)
         obj.save()
+        if request.is_ajax():
+            return JsonResponse(obj.serialize(), status=201) #201-created items
+
+        if next != None and is_safe_url(next_url, ALLOWED_HOSTS):
+            return redirect(next_url)
         form = TweetForm()
     return render(request, 'components/form.html', context={"form": form})
 
@@ -24,7 +38,7 @@ def tweet_list_view(request, *args, **kwargs):
     returns json data
     '''
     qs = Tweet.objects.all()
-    tweet_list = [{"id": x.id, "content": x.content, "likes": random.randint(0,120)} for x in qs]
+    tweet_list = [x.serialize() for x in qs]
     data = {
         "isUser": False,
         "response": tweet_list

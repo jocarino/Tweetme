@@ -9,48 +9,79 @@
     </div>
 </div>
 
+<div class='row mb-3'>
+    <div class='col-md-4 mx-auto col-10'>
+        <form id="tweet-create-form" class='form' method='POST' action='/create-tweet/'>
+            {% csrf_token %}
+            <input type='hidden' value='/' name='next' />
+            <textarea class='form-control' name='content' placeholder='Your tweet...'></textarea>
+            <button type='submit' class='btn btn-primary'>Tweet</button>
+        </form>
+    </div>
+</div>
+
 <div class="row"id="tweets">
     Loading...
 </div>
 
-<div class="row">
-    <div class="col-md-4 mx-auto col-10">
-        <form class="form" method="POST" action="/create-tweet"></form>
-    </div>
-</div>
+
 
 
 <script>
-    const tweetElement = document.getElementById("tweets")
+function handleTweetCreatFormDidSubmit(event) {
+    event.preventDefault()
+    //get the form via the event target
+    const myForm = event.target
+    const myFormData = new FormData(myForm)
+/*     for (var myItem of myFormData.entries()) {
+        console.log(myItem)
+    } */
+    const url = myForm.getAttribute("action")
+    const method = myForm.getAttribute("method")
+    const xhr = new XMLHttpRequest()
+    const responseType = "json"
+    xhr.responseType = responseType
+    xhr.open(method, url)
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    xhr.onload = function() {
+        //const serverResponse = xhr.response
+        //JSON response from the view tweet_create_view
+        /* console.log(xhr.status, serverResponse)
+        const tweetEl = document.getElementById("tweets")
+        loadTweets(tweetEl) */
+        
+        // Instead of realoading all tweets
+        if (xhr.status === 201){ //if object was created
+            const newTweet = xhr.response
+            //const newTweetJson = JSON.parse(newTweet) #in case the response type is not declared
+            console.log(newTweet.likes)
+            const newTweetElemet = formatTweetElement(newTweet)
+            console.log(newTweetElemet)
+        }
+    }
+    xhr.send(myFormData)
+
+
+}
+
+const tweetCreateFormEl = document.getElementById("tweet-create-form")
+
+tweetCreateFormEl.addEventListener("submit", handleTweetCreatFormDidSubmit)
+
+const tweetContainerElement = document.getElementById("tweets")
 /*     tweetElement.innerHTML = "Loading..."
 
-    var el1 = "<h1>Hi there 1</h1>"
-    var el2 = "<h1>Hi there 2</h1>"
-    var el3 = "<h1>Hi there 3</h1>"
-    tweetElement.innerHTML = el1+el2+el3 */
+var el1 = "<h1>Hi there 1</h1>"
+var el2 = "<h1>Hi there 2</h1>"
+var el3 = "<h1>Hi there 3</h1>"
+tweetElement.innerHTML = el1+el2+el3 */
 
-    function handleDidLike (tweet_id, currentCount) {
-        console.log(tweet_id, currentCount)
-    }
-
-    function LikeBtn(tweet) {
-        return "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" + 
-        tweet.id + "," + tweet.likes + ")>"+ tweet.likes +"Like</button>"
-    }
-
-    function formatTweetElement(tweet) {
-        var formattedTweet = "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet-" + tweet.id 
-        + "'><p>" + tweet.content + 
-        "</p><div class='btn-group'>" + LikeBtn(tweet) +
-        "</p></div></div>"
-        return formattedTweet
-    }
-
+function loadTweets(tweetElement) {
     const xhr = new XMLHttpRequest()
     const method = 'GET' // "POST"
     const url = "/tweets" //api url
     const responseType = "json"
-
     xhr.responseType = responseType
     xhr.open(method, url)
     xhr.onload = function() {
@@ -67,6 +98,29 @@
         tweetElement.innerHTML = finalTweetStr
     }    
     xhr.send() //triggers the request
+}
+loadTweets(tweetContainerElement)
+
+function handleDidLike (tweet_id, currentCount) {
+    console.log(tweet_id, currentCount)
+}
+
+function LikeBtn(tweet) {
+    return "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" + 
+    tweet.id + "," + tweet.likes + ")>"+ tweet.likes +"Like</button>"
+}
+
+function formatTweetElement(tweet) {
+    var formattedTweet = "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet-" + tweet.id 
+    + "'><p>" + tweet.content + 
+    "</p><div class='btn-group'>" + LikeBtn(tweet) +
+    "</p></div></div>"
+    return formattedTweet
+}
+
+
+
+    
 
 </script>
 {% endblock content %}
