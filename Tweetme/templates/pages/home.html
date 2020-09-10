@@ -58,6 +58,8 @@ function handleTweetCreatFormDidSubmit(event) {
             console.log(newTweet.likes)
             const newTweetElemet = formatTweetElement(newTweet)
             console.log(newTweetElemet)
+            const ogHtml = tweetContainerElement.innerHTML
+            tweetContainerElement.innerHTML = newTweetElemet + ogHtml
         }
     }
     xhr.send(myFormData)
