@@ -55,9 +55,7 @@ function handleTweetCreatFormDidSubmit(event) {
         if (xhr.status === 201){ //if object was created
             const newTweet = xhr.response
             //const newTweetJson = JSON.parse(newTweet) #in case the response type is not declared
-            console.log(newTweet.likes)
             const newTweetElemet = formatTweetElement(newTweet)
-            console.log(newTweetElemet)
             const ogHtml = tweetContainerElement.innerHTML
             tweetContainerElement.innerHTML = newTweetElemet + ogHtml
         }
