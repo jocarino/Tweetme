@@ -94,7 +94,10 @@ function handleTweetCreatFormDidSubmit(event) {
         } else if (xhr.status === 401) { // server error
                 alert("Please log in and try again.")
                 window.location.href = "/login"
-            }
+        } else if (xhr.status === 403) { // server error
+                alert("Please log in and try again.")
+                window.location.href = "/login"
+        }
     }
     //JS side erros
     xhr.onerror = function() {
