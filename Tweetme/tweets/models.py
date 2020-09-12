@@ -11,7 +11,9 @@ class TweetLike(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class Tweet(models.Model):
-    #many users can have many tweets
+    #if reference tweet is deleted, set the foreign key to null
+    parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
+    #users can have many tweets
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
     content = models.TextField(blank=True, null=True)
     #many to many allows to have a list of Users
