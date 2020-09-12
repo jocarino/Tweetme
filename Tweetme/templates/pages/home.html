@@ -91,7 +91,10 @@ function handleTweetCreatFormDidSubmit(event) {
             //console.log(contentErrorMsg)
         } else if (xhr.status === 500) { // server error
             alert("There was a server error, try again.")
-        }
+        } else if (xhr.status === 401) { // server error
+                alert("Please log in and try again.")
+                window.location.href = "/login"
+            }
     }
     //JS side erros
     xhr.onerror = function() {

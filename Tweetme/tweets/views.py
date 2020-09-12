@@ -15,7 +15,7 @@ def home_view(request, *args, **kwargs):
 
 def tweet_create_view(request, *args, **kwargs):
     user = request.user
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         user = None
         if request.is_ajax():
             return JsonResponse({}, status=401) # send not authorized request
@@ -29,7 +29,7 @@ def tweet_create_view(request, *args, **kwargs):
     if form.is_valid():
         obj = form.save(commit=False)
 
-        obj.user = userk
+        obj.user = user
 
         obj.save()
         if request.is_ajax():
