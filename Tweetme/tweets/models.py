@@ -15,7 +15,7 @@ class Tweet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
     content = models.TextField(blank=True, null=True)
     #many to many allows to have a list of Users
-    likes = models.ManyToManyField(User, related_name='tweet_user', blank=True, through=TweetLike) 
+    likes = models.ManyToManyField(User, related_name='tweet_user', blank=True, through=TweetLike)
     # Image it's a media storage fiels that gets from the database
     image = models.FileField(upload_to='images/', blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
