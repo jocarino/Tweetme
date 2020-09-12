@@ -14,6 +14,12 @@ def home_view(request, *args, **kwargs):
     return render(request, "pages/home.html", context={}, status=200)
 
 def tweet_create_view(request, *args, **kwargs):
+    user = request.user
+    if not request.user.is_authenticated():
+        user = None
+        if request.is_ajax():
+            return JsonResponse({}, status=401) # send not authorized request
+        return redirect(settings.LOGIN_URL)
     form = TweetForm(request.POST or None)
     #print("ajax", request.is_ajax())
     #now I can use this to redirect to where I want
@@ -22,6 +28,9 @@ def tweet_create_view(request, *args, **kwargs):
 
     if form.is_valid():
         obj = form.save(commit=False)
+
+        obj.user = userk
+
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201) #201-created items
