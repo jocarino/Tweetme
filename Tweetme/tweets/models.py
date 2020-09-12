@@ -31,9 +31,19 @@ class Tweet(models.Model):
         #Orders tweets in reverse order accoording to tweet id
         ordering = ['-id']
 
+
+    @property
+    def is_retweet(self):
+        #if it has a parent, it means it's a retweet
+        return self.parent != None
+    
     def serialize(self):
+        '''
+        Old way of serializing tweets
+        '''
         return{
             "id": self.id,
             "content": self.content,
             "likes": random.randint(0,120)
         }
+    
