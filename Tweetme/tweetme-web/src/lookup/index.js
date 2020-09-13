@@ -1,5 +1,6 @@
-import {loadTweets} from './components'
+import { createTweets, loadTweets } from './components'
 
 export {
-    loadTweets
+    loadTweets,
+    createTweets
 }
