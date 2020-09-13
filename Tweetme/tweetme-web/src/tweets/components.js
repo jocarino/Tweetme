@@ -34,6 +34,7 @@ export function TweetsComponent(props) {
 export function TweetsList(props) {
   const [tweetsInit, setTweetsInit] = useState([])
   const [tweets, setTweets] = useState([])
+  const [tweetsDidSet, setTweetsDidSet] = useState(false)
   // listen to the new tweets coming in from the props and concat to the final tweet
   //render if the concatenation is bigger than the current render
   useEffect(() => {
@@ -44,15 +45,18 @@ export function TweetsList(props) {
   }, [props.newTweets, tweets, tweetsInit]) // needed dependencies
 
   useEffect(() => {
-    const myCallback = (response, status) => {
-      if (status === 200) {
-        setTweetsInit(response)
-      } else {
-        alert("There was an error")
+    if (tweetsDidSet === false) {
+      const myCallback = (response, status) => {
+        if (status === 200) {
+          setTweetsInit(response)
+          setTweetsDidSet(true)
+        } else {
+          alert("There was an error")
+        }
       }
+      loadTweets(myCallback)
     }
-    loadTweets(myCallback)
-  }, [])
+  }, [tweetsInit, tweetsDidSet, setTweetsDidSet])
   return tweets.map((item, index) => {
     return <Tweet tweet={item} className='my-5 py-3 border bg-white text-dark text-center' key={`${index}-{item.id}`} />
   })
