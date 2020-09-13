@@ -20,11 +20,23 @@ function loadTweets(callback) {
   xhr.send() //triggers the request
 }
 
+function ActionBtn(props) {
+  const {tweet, action} = props
+  const className = props.className ? props.className : 'btn btn-primary btn-sm'
+  return action.type === 'like' ? <button className={className}>{tweet.likes} Likes </button> : null
+}
+
+
 function Tweet(props) {
   const {tweet} = props
+  // if the props.className exists set it to that, otherwise use the default on the right
   const className = props.className ? props.className : "col-10 mx-auto col-md-6"
   return <div className={className}>
     <p>{tweet.id} - {tweet.content}</p>
+    <div className='btn btn-goup'>
+      <ActionBtn tweet={tweet} action={{type:"like"}} />
+      <ActionBtn tweet={tweet} action={{type:"unlike"}} />
+    </div>
   </div>
 }
 
@@ -33,7 +45,6 @@ function App() {
 
   useEffect(()=> {
     const myCallBack = (response, status) => {
-      console.log(response, status)
       if (status === 200) {
         setTweets(response)
       } else {
