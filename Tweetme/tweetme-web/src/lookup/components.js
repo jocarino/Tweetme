@@ -26,11 +26,11 @@ function lookup(method, endpoint, callback, data) {
   xhr.responseType = "json"
   xhr.open(method, url)
   const csrftoken = getCookie('csrftoken');
+  xhr.setRequestHeader("Content-Type", "application/json")
 
   //https://docs.djangoproject.com/en/2.2/ref/csrf/
   // here there is no csrf token from the form, needs to be set on the request
   if (csrftoken) {
-    xhr.setRequestHeader("Content-Type", "application/json")
     xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xhr.setRequestHeader("X-CSRFToken", csrftoken)
