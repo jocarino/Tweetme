@@ -35,6 +35,7 @@ function lookup(method, endpoint, callback, data) {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xhr.setRequestHeader("X-CSRFToken", csrftoken)
   }
+
   xhr.onload = function () {
     callback(xhr.response, xhr.status)
 
