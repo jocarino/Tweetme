@@ -23,14 +23,22 @@ import {loadTweets} from '../lookup'
 
 export function ActionBtn(props) {
     const {tweet, action} = props
+    const [likes, setLikes] = useState(tweet.likes ? tweet.likes : 0)
+    const [userLike, setUserLike] = useState(tweet.userLike == true ? true : false)
     const className = props.className ? props.className : 'btn btn-primary btn-sm'
     const actionDisplay = action.display ? action.display : 'Action'
     const handleClick = (event) => {
         event.preventDefault()
-        if (action.type == 'like')
-        console.log(tweet.likes+1)
+        if (userLike === true){
+            setLikes(likes - 1)
+            setUserLike(false)
+        } else {
+            setLikes(likes + 1)
+            setUserLike(true)
+        }
+        
     }
-    const display = action.type == 'like' ? `${tweet.likes} ${actionDisplay} ` : action.display
+    const display = action.type == 'like' ? `${likes} ${actionDisplay} ` : action.display
     return <button className={className} onClick={handleClick}>{display}</button>
   }
   
