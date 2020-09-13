@@ -4,10 +4,18 @@ import { loadTweets } from '../lookup'
 
 export function TweetsComponent(props) {
   const textAreaRef = React.createRef()
+  const [newTweets, setNewTweets] = useState([])
   const handleSubmit = (event) => {
     event.preventDefault()
     const newVal = textAreaRef.current.value
-    console.log(newVal)
+    let tempNewTweets = [...newTweets]
+    //push the new tweets to the beggining
+    tempNewTweets.unshift({
+      content: newVal,
+      likes: 0,
+      id: 123123
+    })
+    setNewTweets(tempNewTweets)
     textAreaRef.current.value = ''
   }
   return <div className={props.className}>
@@ -19,17 +27,26 @@ export function TweetsComponent(props) {
         <button type='submit' className='btn btn-primary my-3'>Tweet</button>
       </form>
     </div>
-    <TweetsList />
+    <TweetsList newTweets={newTweets} />
   </div>
 }
 
 export function TweetsList(props) {
+  const [tweetsInit, setTweetsInit] = useState([])
   const [tweets, setTweets] = useState([])
+  // listen to the new tweets coming in from the props and concat to the final tweet
+  //render if the concatenation is bigger than the current render
+  useEffect(() => {
+    const final = [...props.newTweets].concat(tweetsInit)
+    if (final.length !== tweets.length) {
+      setTweets(final)
+    }
+  }, [props.newTweets, tweets, tweetsInit]) // needed dependencies
 
   useEffect(() => {
     const myCallback = (response, status) => {
       if (status === 200) {
-        setTweets(response)
+        setTweetsInit(response)
       } else {
         alert("There was an error")
       }
