@@ -44,11 +44,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #third-party
+    # third-party
     'rest_framework',
     'corsheaders',
 
-    #local
+    # local
     'tweets',
 ]
 
@@ -132,21 +132,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
 
-CORS_ALLOW_ALL_ORIGINS = True #any website has access to my api
+
+CORS_ALLOW_ALL_ORIGINS = True  # any website has access to my api
 CORS_URLS_REGEX = r'^/api/.*$'
 
 
 DEFAULT_RENDERER_CLASSES = [
-        'rest_framework.renderers.JSONRenderer',
-    ]
+    'rest_framework.renderers.JSONRenderer',
+]
 if DEBUG:
-    DEFAULT_RENDERER_CLASSES += [    
+    DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
 
-#makes defaul authentication this for any needed authentication 
-#(has permission classes decorator) or a class that by default needs auth
+# makes defaul authentication this for any needed authentication
+# (has permission classes decorator) or a class that by default needs auth
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication'
