@@ -68,7 +68,7 @@ export function TweetsList(props) {
     }
   }, [tweetsInit, tweetsDidSet, setTweetsDidSet])
   return tweets.map((item, index) => {
-    return <Tweet tweet={item} className='my-5 py-3 border bg-white text-dark text-center' key={`${index}-{item.id}`} />
+    return <Tweet tweet={item} className='my-5 py-3 border bg-white text-dark' key={`${index}-{item.id}`} />
   })
 }
 
@@ -82,7 +82,7 @@ export function ActionBtn(props) {
 
   const handleBackendAction = (response, status) => {
     console.log(response, status)
-    if (status === 200){
+    if (status === 200) {
       setLikes(response.likes)
       //setUserLike(true)
     }
@@ -96,11 +96,26 @@ export function ActionBtn(props) {
   return <button className={className} onClick={handleClick}>{display}</button>
 }
 
+export function ParentTweet(props) {
+  const { tweet } = props
+  return tweet.parent ? <div className='row'>
+    <div className='col-11 mx-auto p-3 border rounded'>
+      <p className='mb-0 text-muted small'>Retweet</p>
+      <Tweet className={''} tweet={tweet.parent} />
+    </div>
+  </div> : null
+
+}
+
 export function Tweet(props) {
   const { tweet } = props
   const className = props.className ? props.className : 'col-10 mx-auto col-md-6'
   return <div className={className}>
-    <p>{tweet.id} - {tweet.content}</p>
+    <div>
+      <p>{tweet.id} - {tweet.content}</p>
+      <ParentTweet tweet = {tweet}></ParentTweet>
+    </div>
+
     <div className='btn btn-group'>
       <ActionBtn tweet={tweet} action={{ type: "like", display: "Likes" }} />
       <ActionBtn tweet={tweet} action={{ type: "unlike", display: "Unlike" }} />
