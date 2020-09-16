@@ -136,7 +136,7 @@ def tweet_create_view_pure_django(request, *args, **kwargs):
             return JsonResponse(form.errors, status=400)
     return render(request, 'components/form.html', context={"form": form})
 
-def tweet_list_view_pute_django(request, *args, **kwargs):
+def tweet_list_view_pure_django(request, *args, **kwargs):
     '''
     REST API VIEW
     Consume by JS or anything else
