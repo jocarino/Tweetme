@@ -6,10 +6,10 @@ import {
 } from './lookup'
 
 export function TweetsComponent(props) {
-  console.log(props)
   const textAreaRef = React.createRef()
   const [newTweets, setNewTweets] = useState([])
 
+  const canTweet = props.canTweet === "false" ? false : true
   const handleBackendUpdate = (response, status) => {
     //backend api response handler
     let tempNewTweets = [...newTweets]
@@ -30,7 +30,7 @@ export function TweetsComponent(props) {
     textAreaRef.current.value = ''
   }
   return <div className={props.className}>
-    <div className='col-12 mb-3'>
+    {canTweet === true && <div className='col-12 mb-3'>
       <form onSubmit={handleSubmit}>
         <textarea ref={textAreaRef} required={true} className='form-control' name='tweet'>
 
@@ -38,7 +38,8 @@ export function TweetsComponent(props) {
         <button type='submit' className='btn btn-primary my-3'>Tweet</button>
       </form>
     </div>
-    <TweetsList newTweets={newTweets} />
+    }
+    <TweetsList newTweets={newTweets} {...props} />
   </div>
 }
 
@@ -65,9 +66,9 @@ export function TweetsList(props) {
           alert("There was an error")
         }
       }
-      apiTweetList(handleTweetListLookup)
+      apiTweetList(props.username, handleTweetListLookup)
     }
-  }, [tweetsInit, tweetsDidSet, setTweetsDidSet])
+  }, [tweetsInit, tweetsDidSet, setTweetsDidSet, props.username])
 
   const handledidRetweet = (newTweets) => {
     const updateTweetsInit = [...tweetsInit]
@@ -80,7 +81,7 @@ export function TweetsList(props) {
     setTweetsInit(updateFinalTweets)
   }
   return tweets.map((item, index) => {
-    return <Tweet 
+    return <Tweet
       tweet={item}
       didRetweet={handledidRetweet}
       className='my-5 py-3 border bg-white text-dark'
@@ -132,7 +133,7 @@ export function Tweet(props) {
     if (status === 200) {
       setActionTweet(newActionTweet)
     } else if (status === 201) {
-      if (didRetweet){
+      if (didRetweet) {
         didRetweet(newActionTweet)
       }
     }
@@ -145,7 +146,7 @@ export function Tweet(props) {
       <ParentTweet tweet={tweet}></ParentTweet>
     </div>
 
-    {(actionTweet && hideActions!==true) && <div className='btn btn-group'>
+    {(actionTweet && hideActions !== true) && <div className='btn btn-group'>
       <ActionBtn tweet={actionTweet} didPerformAction={handlePerformAction} action={{ type: "like", display: "Likes" }} />
       <ActionBtn tweet={actionTweet} didPerformAction={handlePerformAction} action={{ type: "unlike", display: "Unlike" }} />
       <ActionBtn tweet={actionTweet} didPerformAction={handlePerformAction} action={{ type: "retweet", display: "Retweet" }} />
