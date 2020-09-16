@@ -6,6 +6,7 @@ import {
 } from './lookup'
 
 export function TweetsComponent(props) {
+  console.log(props)
   const textAreaRef = React.createRef()
   const [newTweets, setNewTweets] = useState([])
 

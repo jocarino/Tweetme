@@ -11,9 +11,14 @@ if (appEl) {
   ReactDOM.render(<App />, appEl);
 }
 
+const e = React.createElement
+
 const tweetsEl = document.getElementById('tweetme')
 if (tweetsEl) {
-  ReactDOM.render(<TweetsComponent />, tweetsEl);
+  /* data set comming from index.html */
+  console.log(tweetsEl.dataset)
+  // It can pass it the params and props in the TweetsComponent
+  ReactDOM.render(e(TweetsComponent, tweetsEl.dataset), tweetsEl);
 }
 
 
