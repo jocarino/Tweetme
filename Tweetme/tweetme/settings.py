@@ -154,9 +154,9 @@ if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    DEFAULT_AUTHENTICATION_CLASSES += [
+"""     DEFAULT_AUTHENTICATION_CLASSES += [
         'tweetme.rest_api.dev.DevAuthentication'
-    ]
+    ] """
 
 # makes defaul authentication this for any needed authentication
 # (has permission classes decorator) or a class that by default needs auth
